@@ -32,8 +32,8 @@ fi
 echo "====> Successfully copied $count binaries."
 
 cat << 'EOF' > "$STAGING_DIR/DEBIAN/control"
-Package: org.gnu.coreutils-ios6
-Name: GNU Coreutils (iOS 6)
+Package: org.gnu.modern-coreutils
+Name: Modern Coreutils
 Version: 9.11-1
 Architecture: iphoneos-arm
 Description: Modern GNU Coreutils cross-compiled for legacy iOS 6.0+ devices. Safely installed into /usr/local/bin to prevent conflicts with stock utilities.
