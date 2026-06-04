@@ -2,7 +2,7 @@
 
 This repository contains an automated build script and instructions to cross-compile a modern version of GNU Coreutils from a Linux host (Debian/Ubuntu) targeting jailbroken iOS 6.0+ devices (ARMv7, e.g., iPhone 4s, iPad 2/3, iPod Touch 5).
 
-To ensure system stability and avoid conflicts with iOS built-in commands, the binaries are configured to install into an isolated directory (`/opt/coreutils`).
+To ensure system stability and avoid conflicts with iOS built-in commands, the binaries are safely installed into the standard user directory (`/usr/local/bin`). This isolates your cross-compiled tools from critical system files in `/bin` and `/usr/bin` while keeping them instantly accessible in your terminal's `$PATH`.
 
 # Installing from a .deb file (Recommended)
 If you just want to use modern GNU Coreutils on your iOS 6 device without building them from source:
