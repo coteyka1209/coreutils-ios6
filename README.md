@@ -74,6 +74,7 @@ cd coreutils-9.11
 Copy the configure-for-ios6 script from this repository into the root directory of the unpacked Coreutils source code.
 
 ### Step 6: Configure and build
+The configure-for-ios6 script automatically patches and configures coreutils so building and running it on iOS 6 is possible.
 ```bash
 chmod +x configure-for-ios6
 
