@@ -39,7 +39,7 @@ Architecture: iphoneos-arm
 Description: Modern GNU Coreutils cross-compiled for legacy iOS 6.0+ devices. Safely installed into /usr/local/bin to prevent conflicts with stock utilities.
 Maintainer: coteyka
 Author: GNU
-Section: Terminal
+Section: Development
 Priority: optional
 EOF
 
