@@ -7,7 +7,7 @@ To ensure system stability and avoid conflicts with iOS built-in commands, the b
 # Installing from a .deb file (Recommended)
 If you just want to use modern GNU Coreutils on your iOS 6 device without building them from source:
 1. Go to the [Releases](https://github.com/coteyka1209/coreutils-ios6/releases) page.
-2. Download the latest `coreutils-ios6_9.11-1_iphoneos-arm.deb`.
+2. Download the latest .deb file.
 3. Transfer it to your device and install via iFile/Filza, or via SSH using `dpkg -i`.
 
 
