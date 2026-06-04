@@ -113,6 +113,10 @@ tar -xzf coreutils-ios6.tar.gz
 rm coreutils-ios6.tar.gz
 chmod +x *
 ```
+
+### Step 11: Check the new version
+You're all set! Check your new coreutils version by running `ls --version`
+
 ---
 ## Additional info
 Be aware, that I mostly wrote all this using Gemini, and not myself.
