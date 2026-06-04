@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# ==============================================================================
+# 1. ENVIRONMENT & DIRECTORY CHECKS
+# ==============================================================================
+
+# Check if the script is running inside the correct coreutils source directory
+if [ ! -f "configure" ] || [ ! -f "lib/renameatu.c" ]; then
+    echo "ERROR: This script must be run from the root of the coreutils source tree."
+    echo "Please move this script into your coreutils folder and try again."
+    exit 1
+fi
+
+# Try to detect the Theos installation directory
+if [ -z "$THEOS" ]; then
+    if [ -d "$HOME/theos" ]; then
+        THEOS_ROOT="$HOME/theos"
+    elif [ -d "/opt/theos" ]; then
+        THEOS_ROOT="/opt/theos"
+    else
+        echo "ERROR: \$THEOS environment variable is not set, and Theos was not found"
+        echo "in standard locations (~/theos or /opt/theos)."
+        echo "Please set your \$THEOS variable or install the Theos toolchain."
+        exit 1
+    fi
+else
+    THEOS_ROOT="$THEOS"
+fi
+
+# Define SDK and Toolchain paths based on Theos root
+SDK="$THEOS_ROOT/sdks/iPhoneOS6.1.sdk"
+THEOS_BIN="$THEOS_ROOT/toolchain/linux/iphone/bin"
+
+# Check if the required iOS 6 SDK exists
+if [ ! -d "$SDK" ]; then
+    echo "ERROR: iOS 6.1 SDK not found at: $SDK"
+    echo "Please make sure 'iPhoneOS6.1.sdk' is present in your Theos SDKs directory."
+    exit 1
+fi
+
+# Check if the cross-compiler toolchain is available
+if [ ! -x "$THEOS_BIN/clang" ]; then
+    echo "ERROR: Cross-compiler (clang) not found or not executable at: $THEOS_BIN/clang"
+    echo "Please ensure your iOS toolchain is correctly installed in Theos."
+    exit 1
+fi
+
+# ==============================================================================
+# 2. EXPORT COMPILER FLAGS & TOOLS
+# ==============================================================================
+
+echo "Setting up environment for iOS 6.0 (armv7)..."
+
+export PATH="$THEOS_BIN:$PATH"
+export TARGET="armv7-apple-ios6.0"
+
+# Compiler setups
+export CC="$THEOS_BIN/clang -target $TARGET -isysroot $SDK"
+export CXX="$THEOS_BIN/clang++ -target $TARGET -isysroot $SDK"
+
+# Toolchain utilities
+export AR="$THEOS_BIN/ar"
+export AS="$THEOS_BIN/as"
+export STRIP="$THEOS_BIN/strip"
+export RANLIB="$THEOS_BIN/ranlib"
+export LD="$THEOS_BIN/ld"
+
+# Arch and deployment target flags
+export CFLAGS="-arch armv7 -miphoneos-version-min=6.0 -O2"
+export LDFLAGS="-arch armv7 -miphoneos-version-min=6.0"
+
+# ==============================================================================
+# 3. IDEMPOTENT PATCH APPLICATION
+# ==============================================================================
+
+echo "Checking iOS 6 patch status for lib/renameatu.c..."
+
+# Check if the include is already present in the first few lines to avoid duplicate insertions
+if ! head -n 5 lib/renameatu.c | grep -q '<string.h>'; then
+    sed -i '/#include <config.h>/a #include <string.h>' lib/renameatu.c
+    echo "-> Patch applied successfully (added <string.h>)."
+else
+    echo "-> Patch already present. Skipping modification."
+fi
+
+# ==============================================================================
+# 4. RUN CONFIGURATION
+# ==============================================================================
+
+echo "Launching coreutils configure..."
+./configure --host=arm-apple-darwin11 --disable-nls --disable-year2038
